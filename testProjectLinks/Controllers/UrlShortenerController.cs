@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using testProjectLinks.Data;
 using testProjectLinks.Models;
 public class UrlShortenerController : Controller
@@ -10,13 +11,11 @@ public class UrlShortenerController : Controller
         _context = context;
     }
 
-    // Отображение формы для ввода ссылки
     public IActionResult Index()
     {
         return View();
     }
 
-    // Обработка формы и генерация короткой ссылки
     [HttpPost]
     public async Task<IActionResult> ShortenUrl(string originalUrl)
     {
@@ -25,10 +24,8 @@ public class UrlShortenerController : Controller
             return BadRequest("URL is required.");
         }
 
-        // Генерация уникального кода
         string shortUrlCode = GenerateShortUrlCode();
 
-        // Создание новой записи в БД
         var shortenedUrl = new Link
         {
             LinkStr = originalUrl,
@@ -38,26 +35,23 @@ public class UrlShortenerController : Controller
         _context.ShortenedUrls.Add(shortenedUrl);
         await _context.SaveChangesAsync();
 
-        // Отображение результата
         return View("ShortenedUrlResult", shortenedUrl);
     }
 
-    // Перенаправление по короткой ссылке
     [HttpGet("/{code}")]
     public async Task<IActionResult> RedirectToOriginal(string code)
     {
         var shortenedUrl = await _context.ShortenedUrls
-            .FirstOrDefaultAsync(u => u.ShortUrl == code);
+            .FirstOrDefaultAsync(u => u.NewLinkStr == code);
 
         if (shortenedUrl == null)
         {
             return NotFound("URL not found.");
         }
 
-        return Redirect(shortenedUrl.OriginalUrl);
+        return Redirect(shortenedUrl.LinkStr);
     }
 
-    // Генерация случайного уникального кода
     private string GenerateShortUrlCode()
     {
         const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
