@@ -11,5 +11,6 @@ namespace testProjectLinks.Data
         {
             
         }
+        public DbSet<Link> ShortenedUrls { get; set; }
     }
 }

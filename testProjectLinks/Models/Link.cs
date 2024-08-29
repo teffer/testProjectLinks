@@ -6,7 +6,7 @@ namespace testProjectLinks.Models
     {
         public int Id { get; set; }
         public int LinkVisits { get; set; }
-        public DateTime CreationTime { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         [Required]
         public string? LinkStr { get; set; }

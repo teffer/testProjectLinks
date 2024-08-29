@@ -1,0 +1,53 @@
+﻿@using testProjectLinks.ViewModels;
+@model RegistrationViewModel
+@{
+    ViewBag.Title = "Регистрация";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h2 class="text-center">Регистрация</h2>
+            <h2 class="text-center text-info">Register</h2>
+            <form asp-action="Register" method="post" asp-route-returnurl="@ViewData["ReturnUrl"]">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="mb-1">
+                    <label asp-for="Login" class="control-label"></label>
+                    <input asp-for="Login" class="form-control" />
+                    <span asp-validation-for="Login" class="text-danger"></span>
+                </div>
+                <div class="mb-1">
+                    <label asp-for="Email" class="control-label"></label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="mb-1">
+                    <label asp-for="Password" class="control-label"></label>
+                    <input asp-for="Password" class="form-control" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="mb-1">
+                    <label asp-for="ConfirmedPassword" class="control-label"></label>
+                    <input asp-for="ConfirmedPassword" class="form-control" />
+                    <span asp-validation-for="ConfirmedPassword" class="text-danger"></span>
+                </div>
+                <div class="row">
+                    <div class="col-8">
+                        <a asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]" class="text-decoration-none float-start mt-2">Have account?</a>
+                    </div>
+                    <div class="col-4">
+                        <input type="submit" value="Register" class="btn btn-primary btn-sm float-end" />
+                    </div>
+                </div>
+            </form>
+
+            <p class="text-center mt-3">
+                <a href="@Url.Action("Login", "Account")">Уже зарегестрированы? Нажмите для перехода на страницу входа.</a>
+            </p>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
