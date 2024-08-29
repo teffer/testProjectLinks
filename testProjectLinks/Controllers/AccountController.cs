@@ -49,7 +49,7 @@ namespace testProjectLinks.Controllers
                 if (result.Succeeded)
                 {
                     await signInManager.SignInAsync(user,true);
-                    return RedirectToAction(returnUrl);
+                    return RedirectToAction("Index", "Home");
                 }
                 foreach (var error in result.Errors)
                 {
@@ -63,7 +63,7 @@ namespace testProjectLinks.Controllers
         {
             ViewData["ReturnUrl"] = returnUrl;
             await signInManager.SignOutAsync();
-            return RedirectToAction(returnUrl);
+            return View("Login");
         }
         private IActionResult RedirectToLocal(string? returnUrl)
         {
