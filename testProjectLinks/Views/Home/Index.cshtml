@@ -1,0 +1,54 @@
+﻿@model IEnumerable<Link>
+
+@{
+    ViewData["Title"] = "Мои сокращенные ссылки";
+    var request = Context.Request;
+    var baseUrl = $"{request.Scheme}://{request.Host}{request.PathBase}";
+}
+
+<div class="container mt-5">
+    <h2>Сокращение ссылок</h2>
+
+    <form asp-action="ShortenUrl" asp-controller="UrlShortener" method="post" class="form-inline my-4">
+        <div class="form-group mb-2">
+            <input type="text" name="originalUrl" placeholder="Введите ваш URL" class="form-control mr-2" required />
+        </div>
+        <button type="submit" class="btn btn-primary mb-2">Сократить</button>
+    </form>
+
+    <hr />
+
+    @if (Model != null && Model.Any())
+    {
+        <h3>Мои сокращенные ссылки</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Дата создания</th>
+                    <th>Оригинальная ссылка</th>
+                    <th>Короткая ссылка</th>
+                    <th>Количество переходов</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var url in Model)
+                {
+                    <tr>
+                        <td>@url.CreatedAt.ToString("yyyy-MM-dd HH:mm")</td>
+                        <td><a href="@url.LinkStr" target="_blank">@url.LinkStr</a></td>
+                        <td>
+                            <a href="@baseUrl/@url.NewLinkStr">
+                                @baseUrl/@url.NewLinkStr
+                            </a>
+                        </td>
+                        <td>@url.LinkVisits</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p class="text-muted">Пока что у вас нет сокращенных ссылок. Начните с ввода ссылки выше.</p>
+    }
+</div>
